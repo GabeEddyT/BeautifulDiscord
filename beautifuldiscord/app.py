@@ -269,6 +269,15 @@ def main():
 
         window.applyCSS = function(path, name) {
           var customCSS = window.BeautifulDiscord.loadFile(path);
+          let matches = customCSS.matchAll(/^@import ["'](.*)['"];$/gm);
+          for (const match of matches) {
+            let file = match[1];
+            window.applyCSS(
+              window.BeautifulDiscord.join(window.BeautifulDiscord.dirname(path), file), 
+              window.BeautifulDiscord.basename(file)
+            );
+          }
+
           if (!window._styleTag.hasOwnProperty(name)) {
             window._styleTag[name] = document.createElement("style");
             document.head.appendChild(window._styleTag[name]);
